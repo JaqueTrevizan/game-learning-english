@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core'
+import { Component, EventEmitter, Output } from '@angular/core'
 import { Frase } from '../shared/frase.model'
 import { FRASES } from './frases-mock'
 
@@ -7,26 +7,19 @@ import { FRASES } from './frases-mock'
   templateUrl: './painel.component.html',
   styleUrls: ['./painel.component.css']
 })
-export class PainelComponent implements OnInit, OnDestroy {
+export class PainelComponent {
   @Output() public encerrarJogo: EventEmitter<string> = new EventEmitter
 
   public frases: Frase[] = FRASES
   public instrucao: string = 'Traduza a frase:'
   public resposta: string = ''
   public rodada: number = 0
-  public rodadaFrase!: Frase 
+  public rodadaFrase!: Frase
   public progresso: number = 0
   public tentativas: number = 3
 
-  constructor() { 
+  constructor() {
     this.atualizaRodada()
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-      
   }
 
   public atualizaResposta(resposta: Event): void {
@@ -37,24 +30,20 @@ export class PainelComponent implements OnInit, OnDestroy {
 
     if (this.rodadaFrase.frasePtBr == this.resposta) {
 
-      //trocar frase da rodada
       this.rodada++
 
-      //aumentar a barra de progresso
       this.progresso = this.progresso + (100 / this.frases.length)
 
-      if(this.rodada === 4) {
+      if (this.rodada === 4) {
         this.encerrarJogo.emit('vitoria')
       }
 
-      //atualizar o objeto rodadaFrase
       this.atualizaRodada()
 
     } else {
-      //diminuir a variável tentativas
       this.tentativas--
 
-      if(this.tentativas === -1) {
+      if (this.tentativas === -1) {
         this.encerrarJogo.emit('derrota')
       }
 
@@ -63,11 +52,9 @@ export class PainelComponent implements OnInit, OnDestroy {
   }
 
   public atualizaRodada(): void {
-    //define a frase da rodada com base em alguma lógica
     this.rodadaFrase = this.frases[this.rodada]
 
-     //limpar a resposta
-     this.resposta = ''
+    this.resposta = ''
   }
 
 }
